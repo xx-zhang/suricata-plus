@@ -1,0 +1,198 @@
+Readme (dot) Categories May 4, 2010 - JJC
+
+Edited April 1, 2011 - JJC (Discussion of source)
+
+Rule categories are prepended with VRT- or ET- based on source.  If you download
+a ruleset from EmergingThreats, the category(and output file if using -k) will be
+prepended with ET- and if downloaded from snort.org the same will happen but substitute
+ET- with VRT-.  Lastly, if you specify a custom url to fetch the rules from, these
+items will be prepended with Custom-
+
+However, simply specifying the category without noting the source will cause modification to
+ALL sources.. VRT, ET and Custom!.. i.e. specifying only "icmp".
+
+Each respective ruleset from VRT or Emerging Threats (ET) contains categories 
+that their rules belong to.  This file lists (it may not be complete)
+each of these categories.  These specifications may be used in the sid
+modification configuration files (enablesid, dropsid and disablesid).  
+Each category is fairly self explanatory, i.e. voip contains rules pertaining 
+to voip applications and exploits, whereas mysql contains rules targeted 
+at detecting attacks against mysql etc....
+
+How to get the current categories (the categories get renamed and changed without notice.):
+1.) Configure the rules you want (ET,VRT,Pro,w/OinkCode) pulledpork.pl
+2.) Execute the download: /usr/local/bin/pulledpork.pl -c /etc/snort/pulledpork.conf -Pw
+3.) Execute this one-liner: lz /var/tmp/*.gz | egrep '\.rules' | cut -d'/' -f3 | sort -u | perl -lne '/(.*).rules/ && print $1' > rules.`date +%F`
+
+## VRT Categories ##
+app-detect
+attack-responses
+backdoor
+bad-traffic
+blacklist
+botnet-cnc
+browser-chrome
+browser-firefox
+browser-ie
+browser-other
+browser-plugins
+browser-webkit
+chat
+community
+content-replace
+ddos
+decoder
+deleted
+dns
+dos
+experimental
+exploit-kit
+exploit
+file-executable
+file-flash
+file-identify
+file-image
+file-java
+file-multimedia
+file-office
+file-other
+file-pdf
+finger
+ftp
+icmp-info
+icmp
+imap
+indicator-compromise
+indicator-obfuscation
+indicator-scan
+indicator-shellcode
+info
+local
+malware-backdoor
+malware-cnc
+malware-other
+malware-tools
+misc
+multimedia
+mysql
+netbios
+nntp
+oracle
+os-linux
+os-mobile
+os-other
+os-solaris
+os-windows
+other-ids
+p2p
+phishing-spam
+policy-multimedia
+policy-other
+policy
+policy-social
+policy-spam
+pop2
+pop3
+preprocessor
+protocol-dns
+protocol-finger
+protocol-ftp
+protocol-icmp
+protocol-imap
+protocol-nntp
+protocol-other
+protocol-pop
+protocol-rpc
+protocol-scada
+protocol-services
+protocol-snmp
+protocol-telnet
+protocol-tftp
+protocol-voip
+pua-adware
+pua-other
+pua-p2p
+pua-toolbars
+rpc
+rservices
+scada
+scan
+sensitive-data
+server-apache
+server-iis
+server-mail
+server-mssql
+server-mysql
+server-oracle
+server-other
+server-samba
+server-webapp
+shellcode
+smtp
+snmp
+specific-threats
+spyware-put
+sql
+telnet
+tftp
+virus
+voip
+web-activex
+web-attacks
+web-cgi
+web-client
+web-coldfusion
+web-frontpage
+web-iis
+web-misc
+web-php
+x11
+
+## ET Categories ##
+emerging-activex
+emerging-attack_response
+emerging-botcc.portgrouped
+emerging-botcc
+emerging-chat
+emerging-ciarmy
+emerging-compromised
+emerging-current_events
+emerging-deleted
+emerging-dns
+emerging-dos
+emerging-drop
+emerging-dshield
+emerging-exploit
+emerging-ftp
+emerging-games
+emerging-icmp_info
+emerging-icmp
+emerging-imap
+emerging-inappropriate
+emerging-info
+emerging-malware
+emerging-misc
+emerging-mobile_malware
+emerging-netbios
+emerging-p2p
+emerging-policy
+emerging-pop3
+emerging-rbn-malvertisers
+emerging-rbn
+emerging-rpc
+emerging-scada
+emerging-scan
+emerging-shellcode
+emerging-smtp
+emerging-snmp
+emerging-sql
+emerging-telnet
+emerging-tftp
+emerging-tor
+emerging-trojan
+emerging-user_agents
+emerging-voip
+emerging-web_client
+emerging-web_server
+emerging-web_specific_apps
+emerging-worm

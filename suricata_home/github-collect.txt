@@ -1,0 +1,3 @@
+## Readme.md
+
+> https://github.com/suricata-rules/suricata-rules/blob/master/README.zh-CN.md

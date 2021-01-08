@@ -1,0 +1,23 @@
+# Example rules for using the file handling and extraction functionality in Suricata.
+#
+# For storing files make sure you enable the "file" output.
+# Also, make sure you read the comments that go with it in the suricata.yaml file.
+
+
+#alert ftp any any -> any any (msg:"There is FTP Event. Test 1206 by R4164";flow:established;sid:1301;rev:331;)
+#alert smtp any any -> any any (msg:"There is SMTP Event. Test 1206 by R4164";flow:established;sid:1302;rev:331;)
+
+alert ftp-data any any -> any any (msg:"Upload Over FTP";flow:established,to_server;filestore;sid:1601;rev:331;)
+alert ftp-data any any -> any any (msg:"Download Over FTP";flow:established,to_client;filestore;sid:1602;rev:331;)
+
+alert nfs any any -> any any (msg:"Upload Over NFS";flow:established,to_server;filestore;sid:1603;rev:331;)
+alert nfs any any -> any any (msg:"Download Over NFS";flow:established,to_client;filestore;sid:1604;rev:331;)
+
+alert smtp any any -> any any (msg:"Upload Over STMP protocol";flow:established,to_server;filestore;sid:1605;rev:331;)
+alert smtp any any -> any any (msg:"Download Over STMP protocol";flow:established,to_client;filestore;sid:1606;rev:331;)
+
+alert http any any -> any any (msg:"Upload Over Http protocol";flow:established,to_server;filestore;sid:1607;rev:331;)
+alert http any any -> any any (msg:"Download Over Http protocol";flow:established,to_client;filestore;sid:1608;rev:331;)
+
+alert smb any any -> any any (msg:"Upload Over Samba protocol";flow:established,to_server;filestore;sid:1609;rev:331;)
+alert smb any any -> any any (msg:"Download Over Sambar protocol";flow:established,to_client;filestore;sid:1610;rev:331;)
