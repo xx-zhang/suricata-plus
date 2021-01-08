@@ -1,8 +1,6 @@
 FROM centos:centos7.9.2009 as build
 
 USER root
-
-# TODO Set the time and lang
 ENV LANG en_US.UTF-8
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -54,6 +52,8 @@ RUN yum -y install \
         yum clean all
 
 ADD cargo.config /root/.cargo/config
+RUN /usr/bin/cargo install cbindgen && \
+    ln -sf /root/.cargo/bin/cbindgen /usr/bin/cbindgen
 RUN pip3 install Pyyaml -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 WORKDIR /src
@@ -95,7 +95,6 @@ RUN yum -y install \
         file-devel \
         gcc \
         gcc-c++ \
-        git \
         hiredis-devel \
         hyperscan-devel \
         jansson-devel \
@@ -113,7 +112,6 @@ RUN yum -y install \
         libprelude-devel \
         libtool \
         lz4-devel \
-        make \
         nspr-devel \
         nss-devel \
         nss-softokn-devel \

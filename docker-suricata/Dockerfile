@@ -51,7 +51,8 @@ RUN wget https://codeload.github.com/intel/hyperscan/tar.gz/v5.2.1 && tar -zxf h
 ## 安装 pfring
 RUN apt-get install build-essential bison flex linux-headers-$(uname -r) -y
 RUN cd /root/ && wget https://codeload.github.com/ntop/PF_RING/tar.gz/7.4.0 && \
-    tar -zvf PF_RING-7.4.0.tar.gz && cd PF_RING-7.4.0 && make && cd kernel && make install && \
+    tar -zvf PF_RING-7.4.0.tar.gz && cd PF_RING-7.4.0 && make && cd kernel \
+    && make install && \
     cd ../userland/lib && ./configure --prefix=/usr/local/pfring  &&  make install && \
     cd ../libpcap-1.8.1/ && ./configure && make install &&  ldconfig
 
