@@ -1,0 +1,15 @@
+version: "2"
+
+services:
+
+   suricata:
+      container_name: suri
+      image: 'registry.cn-hangzhou.aliyuncs.com/rapid7/suricata:5'
+      volumes:
+        - ./src/suricata.yaml:/etc/suricata/suricata.yaml
+        - ./src/files.rules:/var/lib/suricata/rules/files.rules
+        - /etc/localtime:/etc/localtime:ro
+        - /spool/log/ids:/var/log/suricata
+      restart: always
+      command: -i ens32
+      network_mode: host
