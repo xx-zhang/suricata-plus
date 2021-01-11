@@ -10,13 +10,13 @@ RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Cen
 RUN yum makecache && yum -y install epel-release
 WORKDIR /root
 
-RUN dnf --enablerepo=epel -y install nginx fcgiwrap sueprvisor git git-core
+RUN dnf --enablerepo=epel -y install nginx fcgiwrap supervisor git git-core
 
 ADD ./nginx.conf /etc/nginx/nginx.conf
 ADD ./vhosts /etc/nginx/vhosts
 ADD ./supervisor_git.conf /etc/supervisor/supervisord.conf
 
-ADD ./repository /repository
+#ADD ./repository /repository
 RUN chmod 755 -R /repository
 
 CMD ['/usr/bin/supervisord', '-c', '/etc/supervisor/supervisord.conf']
