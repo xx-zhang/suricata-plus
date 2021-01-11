@@ -16,6 +16,7 @@ ADD ./nginx.conf /etc/nginx/nginx.conf
 ADD ./vhosts /etc/nginx/vhosts
 ADD ./supervisor_git.conf /etc/supervisor/supervisord.conf
 
+RUN mkdir /repository
 #ADD ./repository /repository
 RUN chmod 755 -R /repository
 
