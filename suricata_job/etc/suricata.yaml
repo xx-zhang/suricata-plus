@@ -1413,7 +1413,7 @@ detect:
 # available, "ac" otherwise.
 #
 # The mpm you choose also decides the distribution of mpm contexts for
-# signature groups, specified by the conf - "detect.sgh-mpm-context".
+# signature groups, specified by the vhosts - "detect.sgh-mpm-context".
 # Selecting "ac" as the mpm would require "detect.sgh-mpm-context"
 # to be set to "single", because of ac's memory requirements, unless the
 # ruleset is small enough to fit in one's memory, in which case one can
@@ -1718,7 +1718,7 @@ pfring:
 
 # For FreeBSD ipfw(8) divert(4) support.
 # Please make sure you have ipfw_load="YES" and ipdivert_load="YES"
-# in /etc/loader.conf or kldload'ing the appropriate kernel modules.
+# in /etc/loader.vhosts or kldload'ing the appropriate kernel modules.
 # Additionally, you need to have an ipfw rule for the engine to see
 # the packets from ipfw.  For Example:
 #

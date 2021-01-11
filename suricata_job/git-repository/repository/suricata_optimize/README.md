@@ -638,9 +638,9 @@ re:PCRat\/Gh0st
 效果测试
 --------
 sudo pfcount -i ethX 查看当前流量  
-![image](./suricata1.png)
+![image](suricata1.png)
 htop  性能占用
-![image](./suricata2.png)
+![image](suricata2.png)
 IDS监控脚本
 ```bash
 #!/bin/bash
@@ -673,7 +673,7 @@ rules=`cat /var/lib/suricata/rules/suricata.rules|ag '^alert'|wc -l`
 printf "加载规则: %s 条\n" $rules
 done
 ```
-![image](./suricata3.png)
+![image](suricata3.png)
 
 参考连接
 --------

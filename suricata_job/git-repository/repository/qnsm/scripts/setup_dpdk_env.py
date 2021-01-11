@@ -46,7 +46,7 @@ if __name__ == "__main__":
 	else:
 		conf_file = ENV_CONF_PATH
 	if None == conf_file:
-		print('ERR: conf file not exist')
+		print('ERR: vhosts file not exist')
 		sys.exit(1)
 
 	config = configparser.ConfigParser()
@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
 	proc_shell('mkdir /mnt/huge ; mount -t hugetlbfs nodev /mnt/huge')
 
-	#write RTE env var to conf file, in case of reboot
+	#write RTE env var to vhosts file, in case of reboot
 	if False == has_var_section:
 		config = configparser.RawConfigParser()
 		config.add_section('VAR')

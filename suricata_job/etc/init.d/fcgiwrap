@@ -1,0 +1,86 @@
+#! /bin/bash
+### BEGIN INIT INFO
+# Provides:          fcgiwrap
+# Required-Start:    $remote_fs
+# Required-Stop:     $remote_fs
+# Should-Start:
+# Should-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: FastCGI wrapper
+# Description:       Simple server for running CGI applications over FastCGI
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+SPAWN_FCGI="/usr/local/bin/spawn-fcgi"
+DAEMON="/usr/local/sbin/fcgiwrap"
+NAME="fcgiwrap"
+
+PIDFILE="/var/run/$NAME.pid"
+
+FCGI_SOCKET="/var/run/$NAME.socket"
+FCGI_USER="git"
+FCGI_GROUP="git"
+FORK_NUM=15
+SCRIPTNAME=/etc/init.d/$NAME
+
+case "$1" in
+    start)
+        echo -n "Starting $NAME... "
+
+        PID=`pidof $NAME`
+        if [ ! -z "$PID" ]; then
+            echo " $NAME already running"
+            exit 1
+        fi
+
+        $SPAWN_FCGI -u $FCGI_USER -g $FCGI_GROUP -s $FCGI_SOCKET -P $PIDFILE -F $FORK_NUM -f $DAEMON
+
+        if [ "$?" != 0 ]; then
+            echo " failed"
+            exit 1
+        else
+            echo " done"
+        fi
+    ;;
+
+    stop)
+        echo -n "Stoping $NAME... "
+
+        PID=`pidof $NAME`
+        if [ ! -z "$PID" ]; then
+            kill `pidof $NAME`
+            if [ "$?" != 0 ]; then
+                echo " failed. re-quit"
+                exit 1
+            else
+                rm -f $pid
+                echo " done"
+            fi
+        else
+            echo "$NAME is not running."
+            exit 1
+        fi
+    ;;
+
+    status)
+        PID=`pidof $NAME`
+        if [ ! -z "$PID" ]; then
+            echo "$NAME (pid $PID) is running..."
+        else
+            echo "$NAME is stopped"
+            exit 0
+        fi
+    ;;
+
+    restart)
+        $SCRIPTNAME stop
+        sleep 1
+        $SCRIPTNAME start
+    ;;
+
+    *)
+        echo "Usage: $SCRIPTNAME {start|stop|restart|status}"
+        exit 1
+    ;;
+esac

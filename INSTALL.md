@@ -2,11 +2,24 @@
 
 > 参考官方文档和 `fedara` 构建者的过程
 
-## 安装基础包
+## install hyperscsan
 ```bash
 
+LIB_TOOL_DIR='https://code.aliyun.com/rapidinstant/ids-tools/raw/master/docs/install_suricata'
 
+## 安装 hyperscan ; https://www.cnblogs.com/yanhai307/p/10770821.html
 
+wget $LIB_TOOL_DIR/ragel-6.10.tar.gz && \
+    tar -zxf ragel-6.10.tar.gz && cd ragel-6.10 && \
+    ./configure && make && make install
+
+wget $LIB_TOOL_DIR/boost_1_69_0.tar.gz && \
+    tar -zxf boost_1_69_0.tar.gz && cd boost_1_69_0 && ./bootstrap.sh && ./b2 --with-iostreams --with-random install && ldconfig
+
+RUN wget $LIB_TOOL_DIR/hyperscan-5.2.1.tar.gz && tar -zxf hyperscan-5.2.1.tar.gz && \
+    cd hyperscan-5.2.1 && \
+    mkdir cmake-build && cd cmake-build  && cmake -DBUILD_SHARED_LIBS=on -DCMAKE_BUILD_TYPE=Release .. && \
+    make -j8 && make install && ldconfig
 ```
 
 ## install pfring 
@@ -101,9 +114,9 @@ LIBS="-lrt" ./configure \
   
   
 make clean && make && make install && ldconfig
-make install-conf
+make install-vhosts
 
-cat > /etc/ld.conf.d/local.conf <<- EOF
+cat > /etc/ld.vhosts.d/local.vhosts <<- EOF
 
 /usr/local/lib 
 EOF 

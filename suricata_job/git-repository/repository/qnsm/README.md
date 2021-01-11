@@ -1,4 +1,4 @@
-![logo.png](./resources/pic/logo.png)
+![logo.png](resources/pic/logo.png)
 
 # 简介
 QNSM(IQIYI Network Security Monitor) 是一个旁路部署的全流量，实时，高性能网络安全监控引擎，基于DPDK开发，集成了DDOS检测和IDPS模块。
@@ -20,12 +20,12 @@ IDPS模块基于[Suricata](https://github.com/OISF/suricata)，并新增了如�
 * 支持事件以Kafka方式输出，提升事件吞吐量，便于进一步数据分析
 
 ## 部署描述
-![deploy.JPG](./resources/pic/deploy.JPG)
+![deploy.JPG](resources/pic/deploy.JPG)
 
 ## 架构描述
 整体功能模块图如下：
 
-![qnsm.png](./resources/pic/qnsm.png)
+![qnsm.png](resources/pic/qnsm.png)
 
 * 基础模块
 
@@ -54,7 +54,7 @@ IDPS模块基于[Suricata](https://github.com/OISF/suricata)，并新增了如�
     
     CS：IDPS 统计数据
 
-更多细节参考 [`GUIDE`](./doc/guide.md).
+更多细节参考 [`GUIDE`](doc/guide.md).
 
 ## 外部会议介绍
 * QCon Shanghai 2019 [PPT](https://static001.geekbang.org/con/44/pdf/420097813/file/卢明樊.pdf  "爱奇艺网络流量安全检测能力建设实践")
@@ -118,7 +118,7 @@ name=ens7f1
 
 运行环境配置脚本。
 ```bash
-$ python ./scripts/setup_dpdk_env.py conf/dpdk_env.cfg
+$ python ./scripts/setup_dpdk_env.py vhosts/dpdk_env.cfg
 $ ${RTE_SDK}/tools/dpdk-devbind.py --status
 
 Network devices using DPDK-compatible driver
@@ -179,10 +179,10 @@ ddos、idps、ddos-idps是qnsm支持的三种部署形态，默认以ddos-idps�
 
 ## 配置文件
 
-启动QNSM之前，需要依据[`配置手册`](./doc/configure-tutorial.md)修改`/var/qnsm`安装目录下的配置文件。 
+启动QNSM之前，需要依据[`配置手册`](doc/configure-tutorial.md)修改`/var/qnsm`安装目录下的配置文件。 
 
 ## 启动 QNSM
-QNSM日志支持syslog输出，相关配置如下，可以参考[`配置手册`](./doc/configure-tutorial.md)。
+QNSM日志支持syslog输出，相关配置如下，可以参考[`配置手册`](doc/configure-tutorial.md)。
 ```
 $ cat /var/qnsm/qnsm_edge.xml 
 <CONFIG>
@@ -222,7 +222,7 @@ $ ./qnsm-inspect -f qnsm_inspect.cfg -c . -p 3
 另外，可以编写多个部署配置文件（qnsm_inspect_x.cfg），这样的话，可以启动多个QNSM进程。
 
 ## 测试QNSM消息接口
-QNSM提供多种kafka消息接口接口与外部交互。消息接口格式参考 [`MSG FORMAT`](./doc/msg.md)。
+QNSM提供多种kafka消息接口接口与外部交互。消息接口格式参考 [`MSG FORMAT`](doc/msg.md)。
 
 ### DDOS检测
 #### 数据接口
@@ -260,7 +260,7 @@ QNSM: 1557921514 master cmd msg {"id":0,"op":"ip_dump_pkt_enable","content":[{"i
 $ ls dump
 xx.xx.xx.xx-core5-20191018-1522.pcap
 ```
-dump目录配置如下，可以参考[`配置手册`](./doc/configure-tutorial.md)。
+dump目录配置如下，可以参考[`配置手册`](doc/configure-tutorial.md)。
 ```
 $ cat /var/qnsm/qnsm_edge.xml 
 <CONFIG>
@@ -335,7 +335,7 @@ $ cat /var/qnsm/qnsm_edge.xml
 
 # 版权说明
 
-[License](./LICENSE.md)
+[License](LICENSE.md)
 
 # 开源合作
 

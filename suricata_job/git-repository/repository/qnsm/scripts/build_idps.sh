@@ -38,7 +38,7 @@ chmod +x libhtp/get-version.sh
 sh autogen.sh
 ./configure --enable-rust=no --enable-rdkafka --enable-gccmarch-native=no CPPFLAGS=-I/usr/include/ CFLAGS=-g
 
-#add qnsm conf
+#add qnsm vhosts
 sed -i '/HAVE_QNSM/d' config.h
 sed -i '/DEBUG_VALIDATION/ a #define HAVE_QNSM 1' config.h
 sed -i '/LOCAL_STATE_DIR/d' config.h
