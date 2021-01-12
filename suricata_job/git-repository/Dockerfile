@@ -20,4 +20,6 @@ RUN mkdir /repository
 #ADD ./repository /repository
 RUN chmod 755 -R /repository
 
+EXPOSE 80
+
 CMD ['/usr/bin/supervisord', '-c', '/etc/supervisor/supervisord.conf']

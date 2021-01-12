@@ -1,4 +1,4 @@
-#!/bib/bash
+#!/bin/bash
 
 function  init_centos() {
     export LANG en_US.UTF-8
@@ -6,13 +6,13 @@ function  init_centos() {
   curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo && \
     sed -i -e '/mirrors.cloud.aliyuncs.com/d' -e '/mirrors.aliyuncs.com/d' /etc/yum.repos.d/CentOS-Base.repo && \
     curl -o /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-7.repo
-  yum makecache && yum -y update && yum -y install wget cmake3
+  yum makecache && yum -y update && yum -y install wget cmake3 cmake
 }
 
 function install_deps() {
     yum -y install autoconf automake libtool pkgconfig \
         rust cargo file file-devel \
-        gcc gcc-c++ git hiredis-devel hyperscan-devel \
+        gcc gcc-c++ git hiredis-devel \
         jansson-devel jq lua-devel libyaml-devel zlib-devel \
         libnfnetlink-devel libnetfilter_queue-devel \
         libnet-devel  libcap-ng-devel \
@@ -23,11 +23,13 @@ function install_deps() {
         which  && \
         yum clean all
 
-  yum install -y libpcap zlib libyaml libpcap-devel \
+  yum install -y libpcap zlib libyaml \
     jansson-devel pcre-devel lua-devel \
     libmaxminddb-devel epel-release  libnetfilter_queue-devel nss-devel \
-    libyaml-devel zlib-devel luajit-devel  && \
+    libyaml-devel zlib-devel && \
         yum clean all
+
+  yum install -y flex bisson kernel-devel
 }
 
 
@@ -52,13 +54,17 @@ pip3 install Pyyaml -i https://pypi.tuna.tsinghua.edu.cn/simple
 }
 
 function install_luajit() {
+  cd /srv
+
     wget -c -N https://code.aliyun.com/rapidinstant/ids-tools/raw/master/datas/LuaJIT-2.0.5.tar.gz && \
   tar -xzvf LuaJIT-2.0.5.tar.gz && cd LuaJIT-2.0.5 && make && make install
 }
 
 function install_hyperscan(){
 
-  LIB_TOOL_DIR='https://code.aliyun.com/rapidinstant/ids-tools/raw/master/docs/install_suricata'
+  cd /srv
+
+  LIB_TOOL_DIR='https://code.aliyun.com/rapidinstant/ids-tools/raw/master/docs/install-suricata/'
 
   ## 安装 hyperscan ; https://www.cnblogs.com/yanhai307/p/10770821.html
 
@@ -66,26 +72,32 @@ function install_hyperscan(){
       tar -zxf ragel-6.10.tar.gz && cd ragel-6.10 && \
       ./configure && make && make install
 
+  cd ..
+
   wget $LIB_TOOL_DIR/boost_1_69_0.tar.gz && \
       tar -zxf boost_1_69_0.tar.gz && cd boost_1_69_0 && ./bootstrap.sh && ./b2 --with-iostreams --with-random install && ldconfig
+  cd ..
 
-  RUN wget $LIB_TOOL_DIR/hyperscan-5.2.1.tar.gz && tar -zxf hyperscan-5.2.1.tar.gz && \
+  wget $LIB_TOOL_DIR/hyperscan-5.2.1.tar.gz && tar -zxf hyperscan-5.2.1.tar.gz && \
       cd hyperscan-5.2.1 && \
       mkdir cmake-build && cd cmake-build  && cmake -DBUILD_SHARED_LIBS=on -DCMAKE_BUILD_TYPE=Release .. && \
       make -j8 && make install && ldconfig
+  cd ..
+
 }
 
 function install_pfring(){
+  ln -sf $(find /usr/src/kernels/ -maxdepth 1 | grep el7.x86_64) /lib/modules/3.10.0-1127.el7.x86_64/build
   wget -c -N https://code.aliyun.com/rapidinstant/ids-tools/raw/master/datas/PF_RING-7.8.0.tar.gz  && \
-tar -xf PF_RING-7.8.0.tar.gz && cd PF_RING-7.8.0 && make && cd kernel \
-    && make install && \
+tar -xf PF_RING-7.8.0.tar.gz && \
+    cd PF_RING-7.8.0 && make -j2 && cd kernel && make install && \
+    insmod pf_ring.ko && \
     cd ../userland/lib && ./configure  &&  make install && \
     cd ../libpcap && ./configure && make install &&  ldconfig
-
 }
 
 function download_suricata() {
-    cd /src && git clone https://github.com/OISF/suricata.git --depth=1 && \
+    cd /srv && git clone https://github.com/OISF/suricata.git --depth=1 && \
         cd suricata && \
             git clone https://github.com/OISF/libhtp.git --depth=1 && \
         cd suricata-update && \
@@ -96,7 +108,7 @@ function download_suricata() {
 
 
 function install_suricata() {
-    cd /src/suricata && ./autogen.sh && \
+    cd /srv/suricata && ./autogen.sh && \
   LIBS="-lrt" ./configure  \
   --prefix=/usr \
   --sysconfdir=/etc \
@@ -116,7 +128,7 @@ function install_suricata() {
 make clean && make -j 2 && make install && ldconfig
 make install-conf
 
-cat > /etc/ld.conf.d/local.conf <<- EOF
+cat > /etc/ld.so.conf.d/local.conf <<- EOF
 
 /usr/local/lib
 EOF
@@ -142,40 +154,21 @@ EndOfHelp
 }
 
 case "$COMMAND" in
-'all')
-    apt install language-pack-UTF-8 -y
-    qemu_func
-    seabios_func
-    if [ "$OS" = "Linux" ]; then
-        install_kvm_linux
-        install_virt_manager
-        install_libguestfs
-        # check if all features enabled
-        virt-host-validate
-        systemctl daemon-reload
-        systemctl restart libvirtd libvirt-guests.service
-        _enable_tcp_bbr
-        grub_iommu
-        enable_sysreq
-    elif [ "$OS" = "Darwin" ]; then
-        install_haxm_mac
-    fi
+'base')
+    install_deps
     ;;
-'qemu')
-    qemu_func;;
-'webvirtmgr')
-    install_WebVirtCloud;;
-'grub')
-    grub_iommu;;
-'mosh')
-    if [ "$OS" = "Linux" ]; then
-        sudo apt install mosh -y
-    elif [ "$OS" = "Darwin" ]; then
-        _check_brew
-        brew install mosh
-    else
-        echo "https://mosh.org/#getting"
-    fi
+'all')
+    echo 'install all'
+    ;;
+'pfring')
+    install_pfring;;
+'luajit')
+    install_luajit;;
+'cargo')
+    install_cargo;;
+'suricata')
+    download_suricata;
+    install_suricata ;
     ;;
 *)
     usage;;

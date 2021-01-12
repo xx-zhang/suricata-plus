@@ -1,0 +1,13 @@
+version: "2"
+
+services:
+
+   git-http-server:
+      container_name: git-server
+      image: 'registry.cn-beijing.aliyuncs.com/actanble/git-http-server'
+      ports:
+      - 80:80
+      volumes:
+        - /git:/repository
+      restart: always
+      command: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf

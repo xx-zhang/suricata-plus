@@ -24,12 +24,6 @@ RUN wget $LIB_TOOL_DIR/hyperscan-5.2.1.tar.gz && tar -zxf hyperscan-5.2.1.tar.gz
 
 ## install pfring 
 ```bash
-
-wget -c -N https://code.aliyun.com/rapidinstant/ids-tools/raw/master/datas/PF_RING-7.8.0.tar.gz  && \
-tar -xf PF_RING-7.8.0.tar.gz && cd PF_RING-7.8.0 && make && cd kernel \
-    && make install && \
-    cd ../userland/lib && ./configure  &&  make install && \
-    cd ../libpcap && ./configure && make install &&  ldconfig
 # https://blog.csdn.net/qq_31507523/article/details/110092228 
 cd PF_RING
 make
@@ -90,6 +84,7 @@ cd ..
 
 
 ## 编译suricata
+
 ```bash
 # http://www.ntop.org/guides/pf_ring/thirdparty/suricata.html 
 
@@ -111,7 +106,6 @@ LIBS="-lrt" ./configure \
   --with-libhs-libraries=/usr/local/lib/ \
   --enable-profiling \
   --enable-nfqueue
-  
   
 make clean && make && make install && ldconfig
 make install-vhosts
