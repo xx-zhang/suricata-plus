@@ -1,5 +1,7 @@
 https://github.com/robertdavidgraham/masscan
+https://github.com/nmap/nmap
 https://github.com/OISF/suricata
+https://github.com/gamelinux/prads
 https://github.com/SpiderLabs/ModSecurity
 https://github.com/SpiderLabs/ModSecurity-nginx
 https://github.com/zeek/zeek
@@ -80,3 +82,5 @@ https://github.com/Kong/kong
 https://github.com/leebaird/discover
 https://github.com/connors/photon
 https://github.com/secdev/scapy
+https://github.com/llvm/llvm-project
+https://github.com/CyberMonitor/APT_CyberCriminal_Campagin_Collections
