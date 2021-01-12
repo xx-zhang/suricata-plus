@@ -120,11 +120,11 @@ EOF
 ## pfring 运行
 ```bash
 
-suricata --pfring-int=eth0 \
-  --pfring-cluster-id=99 \
-  --pfring-cluster-type=cluster_flow \
-  -c /etc/suricata/suricata.yaml
+suricata -c /etc/suricata/suricata-ips.yaml -l /data/suricata-alerts -q 0 -D 
+  
+suricata -c /etc/suricata/suricata.yaml -s ips-http.rules -q 0
 
+suricata -c /etc/suricata/suricata-ips.yaml -q 0 -D 
 ```
 
 ## IPS 模式
@@ -132,6 +132,42 @@ suricata --pfring-int=eth0 \
 
 iptables -I INPUT -j NFQUEUE
 iptables -I OUTPUT -j NFQUEUE
-suricata -c /etc/suricata/suricata.yaml -s ips-http.rules -q 0
 
+/usr/bin/suricata --pfring-int=eth0 --pfring-cluster-id=99 --pfring-cluster-type=cluster_flow -c /etc/suricata/suricata.yaml
+
+# IPS 模式。
+/usr/bin/suricata \
+  --pfring-cluster-id=99 \
+  --pfring-cluster-type=cluster_flow \
+  -c /etc/suricata/suricata-ips.yaml -l /data/suricata-ips \
+  -q 0 -D 
+
+```
+### suricata-ips 配置
+```
+//默认为0队列 
+sudo iptables -I FORWARD -j NFQUEUE --queue-num 0 
+sudo iptables -I INPUT -j NFQUEUE --queue-num 0 
+sudo iptables -I OUTPUT -j NFQUEUE --queue-num 0
+
+//也可指定协议 
+sudo iptables -I INPUT -p tcp -j NFQUEUE --queue-num 0 
+sudo iptables -I OUTPUT -p tcp -j NFQUEUE --queue-num 0
+
+//同时指定端口号 
+sudo iptables -I INPUT -p tcp --sport 80 -j NFQUEUE --queue-num 0 
+sudo iptables -I OUTPUT -p tcp --dport 80 -j NFQUEUE --queue-num 0
+
+//也可按照物理接口号指定 
+sudo iptables -I FORWARD -i eth0 -o docker0 -j NFQUEUE 
+sudo iptables -I FORWARD -i docker0 -o eth0 -j NFQUEUE
+
+```
+
+## tewt-rules
+```
+drop http any any -> 192.168.122.110 any (msg:"suricata-alert:Select Attack!!";content:"select";nocase;sid:800001;rev:1;) 
+reject http any any -> 192.168.31.100 any (msg:" suricata-alert:Union Attack!!";content:"union";nocase;sid:800002;rev:1;) 
+reject http any any -> 192.168.31.100 any (msg:" suricata-alert:SQL Injection Attack tries!!";content:"and";nocase;sid:800003;rev:1;) 
+reject http any any -> 192.168.31.100 any (msg:" suricata-alert:SQL Injection Attack tries!!";content:"and";http_uri;nocase;sid:800004;rev:1;)
 ```
