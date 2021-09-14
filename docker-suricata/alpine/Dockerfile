@@ -4,7 +4,7 @@ RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo "Asia/Shanghai" > /etc/timezone \
     && apk del tzdata
 	
-SURICATA_VERSION=6.0.3
+ENV SURICATA_VERSION=6.0.3
 #
 # Include dist
 ADD dist /root/dist/
